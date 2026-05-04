@@ -1,14 +1,27 @@
 <?php 
     include("config/database.php");
 
+    $result=null;
+    if(isset($_GET['id'])){
+        $sql="select * from users_register where id=".$_GET['id'];
+        $result=$conn->query($sql);
+        $user=mysqli_fetch_assoc($result);
+        if($result){
+            //echo "edited ";
+        }else{
+            echo "can not edit";
+            exit;
+        }
+    }
+
+
     if(isset($_POST["btn"])){
         extract($_POST);
         if(empty($username) || empty($password)){
             echo "enter complete details <br>";
         }else{
             $date=date("Y-m-d H:i:s");
-            $sql="insert into users_register (username,password,created_at)
-                     values ('$username','$password','$date')";
+            $sql="update users_register set username='$username',password='$password' where id=".$_GET['id'];
             $result=$conn->query($sql);
              if($result){
             }else{
@@ -16,6 +29,7 @@
                 }
             }
     }
+    
 
 ?>
 
@@ -24,7 +38,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registration Form</title>
+<title>Edit Form</title>
 
 <style>
     * {
@@ -116,26 +130,62 @@
         }
     }
 
+    /* Back Button */
+.back-btn {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    margin-bottom: 15px;
+    text-decoration: none;
+    color: white;
+    background: #444;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: 0.3s;
+    margin-top: 3px;
+}
+
+.back-btn:hover {
+    background: #222;
+    transform: translateX(-3px);
+}
+
+/* Edit Button Style Upgrade */
+.edit-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.edit-btn:hover {
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="container">
-    <h2>Register</h2>
+    <h2>Edit</h2>
 
-    <form action="index.php" method="post">
+    <form action="edit_user.php?id=<?php echo $user['id'] ?>" method="post">
         <div class="input-group">
-            <input type="text" name="username" placeholder="Enter your name" required>
+            <input type="text" name="username" placeholder="Enter your name" value="<?php echo $user['username'] ?>" required>
         </div>
 
         <div class="input-group">
-            <input type="password" name="password" placeholder="Enter your password" required>
+            <input type="password" name="password" placeholder="Enter your password" value="<?php echo $user['password'] ?>" required>
         </div>
 
-        <input type="submit" name="btn" value="Submit">
+        <input  class="btn edit-btn" type="submit" name="btn" value="edit">
     </form>
+
+    <a href="users.php" class="back-btn">⬅ Back</a>
 </div>
 
+    
 </body>
 </html>

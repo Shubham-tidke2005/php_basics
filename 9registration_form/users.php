@@ -1,5 +1,15 @@
 <?php 
     include("config/database.php");
+    if(isset($_GET['id'])){
+        $sql="delete from users_register where id=".$_GET['id'];
+        $result=$conn->query($sql);
+        if($result){
+            //echo "edited ";
+        }else{
+            echo "can not delete";
+            exit;
+        }
+    }
 
     $sql="select * from users_register";
 
@@ -168,6 +178,7 @@ tbody tr:hover {
         <tbody>
             <!-- Row 1 -->
              <?php 
+             if($result->num_rows>0){
                
                 while($curr_user=$result->fetch_assoc()){
                 
@@ -178,14 +189,21 @@ tbody tr:hover {
                 <td data-label="Username"><?php echo ($curr_user["username"]) ?></td>
                 <td data-label="Created At"><?php echo ($curr_user["created_at"]) ?></td>
                 <td data-label="Actions">
-                    <a href="edit_user.php" class="btn edit">Edit</a>
-                    <a href="delete_user.php" class="btn delete">Delete</a>
+                    <a href="edit_user.php?id=<?php echo $curr_user["id"]?>" class="btn edit">Edit</a>
+                    <a href="users.php?id=<?php echo $curr_user["id"]?>" class="btn delete">Delete</a>
                 </td>
 
             
             </tr>
             <?php 
                 }
+             }
+
+             else{
+            ?>
+                <td data-label="ID" colspan="4">users not present </td>
+            <?php
+             }
              ?>
 
 

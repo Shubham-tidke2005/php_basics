@@ -11,6 +11,8 @@
                      values ('$username','$password','$date')";
             $result=$conn->query($sql);
              if($result){
+                header("Location: users.php");
+                exit;
             }else{
                   echo "have some error";
                 }
@@ -133,7 +135,7 @@
             <input type="password" name="password" placeholder="Enter your password" required>
         </div>
 
-        <input type="submit" name="btn" value="Submit">
+        <input class="btn" type="submit" name="btn" value="Submit">
     </form>
 </div>
 
